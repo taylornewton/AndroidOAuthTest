@@ -58,11 +58,8 @@ public class MainActivity extends AppCompatActivity {
 
         int permissionCheckGetAccounts = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.GET_ACCOUNTS);
-        int permissionCheckAccountManager = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCOUNT_MANAGER);
 
-        if (permissionCheckGetAccounts != PackageManager.PERMISSION_GRANTED
-                || permissionCheckAccountManager != PackageManager.PERMISSION_GRANTED) {
+        if (permissionCheckGetAccounts != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[] {
                     Manifest.permission.GET_ACCOUNTS,
                     Manifest.permission.ACCOUNT_MANAGER
