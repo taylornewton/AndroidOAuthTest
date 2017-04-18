@@ -46,8 +46,17 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                int permissionCheckGetAccounts = ContextCompat.checkSelfPermission(context,
+                        Manifest.permission.GET_ACCOUNTS);
+
+                if (permissionCheckGetAccounts != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(getParent(), new String[] {
+                            Manifest.permission.GET_ACCOUNTS,
+                            Manifest.permission.ACCOUNT_MANAGER
+                    },  PERMISSION_REQUEST_GET_ACCOUNTS);
+                } else {
+                    doTheThing();
+                }
             }
         });
 
@@ -55,19 +64,6 @@ public class MainActivity extends AppCompatActivity {
 
         accountManager = AccountManager.get(context);
         authPreferences = new AuthPreferences(this);
-
-        int permissionCheckGetAccounts = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.GET_ACCOUNTS);
-
-        if (permissionCheckGetAccounts != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[] {
-                    Manifest.permission.GET_ACCOUNTS,
-                    Manifest.permission.ACCOUNT_MANAGER
-            },  PERMISSION_REQUEST_GET_ACCOUNTS);
-        } else {
-            doTheThing();
-        }
-
     }
 
     @Override
