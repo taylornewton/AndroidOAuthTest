@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -25,15 +24,14 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     private Context context;
+    private AppCompatActivity thisActivity;
     private AuthPreferences authPreferences;
     private AccountManager accountManager;
     private static final int PERMISSION_REQUEST_GET_ACCOUNTS = 55;
     private static final int ACCOUNT_CODE = 44;
     private static final int AUTHORIZATION_CODE = 33;
 
-
-
-    private final String SCOPE = "https://www.googleapis.com/auth/googletalk";
+    private final String SCOPE = "https://www.googleapis.com/auth/gmail.readonly";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +39,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        context = this;
+        thisActivity = this;
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -50,17 +51,14 @@ public class MainActivity extends AppCompatActivity {
                         Manifest.permission.GET_ACCOUNTS);
 
                 if (permissionCheckGetAccounts != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(getParent(), new String[] {
-                            Manifest.permission.GET_ACCOUNTS,
-                            Manifest.permission.ACCOUNT_MANAGER
+                    ActivityCompat.requestPermissions(thisActivity, new String[] {
+                            Manifest.permission.GET_ACCOUNTS
                     },  PERMISSION_REQUEST_GET_ACCOUNTS);
                 } else {
                     doTheThing();
                 }
             }
         });
-
-        context = getApplicationContext();
 
         accountManager = AccountManager.get(context);
         authPreferences = new AuthPreferences(this);
@@ -172,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
                     doCoolAuthenticatedStuff();
                 }
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                System.out.println(e);
             }
         }
     }
